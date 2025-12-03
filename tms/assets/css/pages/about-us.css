@@ -1,0 +1,179 @@
+:root {
+    --nepal-red: #DC143C;
+    --nepal-blue: #003893;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f8fafc;
+}
+
+.page-header {
+    background: linear-gradient(135deg, rgba(0, 56, 147, 0.95), rgba(220, 20, 60, 0.85)), 
+                url('https://images.unsplash.com/photo-1605640840605-14ac1855827b?w=1920') center/cover;
+    padding: 100px 0 60px;
+    color: white;
+    text-align: center;
+}
+
+.page-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.content-section {
+    padding: 60px 0;
+}
+
+.content-card {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    line-height: 1.8;
+}
+
+.content-card h2 {
+    color: var(--nepal-blue);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.content-card h3 {
+    color: var(--nepal-red);
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.content-card p {
+    color: #475569;
+    font-size: 1.05rem;
+}
+
+.content-card ul {
+    color: #475569;
+    font-size: 1.05rem;
+}
+
+.content-card ul li {
+    margin-bottom: 10px;
+}
+
+.team-section {
+    background: #f1f5f9;
+    padding: 60px 0;
+}
+
+.team-member {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.team-member:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.team-img {
+    height: 250px;
+    background: linear-gradient(45deg, var(--nepal-blue), var(--nepal-red));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 4rem;
+}
+
+.team-info {
+    padding: 20px;
+    text-align: center;
+}
+
+.team-info h4 {
+    color: var(--nepal-blue);
+    margin-bottom: 5px;
+}
+
+.team-info p {
+    color: var(--nepal-red);
+    margin-bottom: 15px;
+}
+
+.stats-section {
+    padding: 60px 0;
+    background: linear-gradient(135deg, var(--nepal-blue), #1e40af);
+    color: white;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.stat-card i {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.stat-card h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.stat-card p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.mission-section {
+    padding: 80px 0;
+}
+
+.mission-card {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    height: 100%;
+}
+
+.mission-card i {
+    font-size: 3rem;
+    color: var(--nepal-blue);
+    margin-bottom: 20px;
+}
+
+.values-section {
+    background: #f1f5f9;
+    padding: 80px 0;
+}
+
+.value-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.value-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.value-card i {
+    font-size: 2.5rem;
+    color: var(--nepal-red);
+    margin-bottom: 20px;
+}
+
+.value-card h4 {
+    color: var(--nepal-blue);
+    margin-bottom: 15px;
+}

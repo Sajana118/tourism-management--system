@@ -1,0 +1,163 @@
+:root {
+    --nepal-red: #DC143C;
+    --nepal-blue: #003893;
+    --primary-color: #2563eb;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f8fafc;
+    margin: 0;
+    padding: 0;
+}
+
+.page-header {
+    background: #003893;
+    padding: 60px 0 40px;
+    color: white;
+    text-align: center;
+}
+
+.package-detail-section {
+    padding: 40px 0;
+}
+
+.package-main-img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+}
+
+.package-info-card {
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.package-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--nepal-blue);
+    margin-bottom: 12px;
+}
+
+.package-id {
+    color: var(--nepal-red);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: var(--nepal-blue);
+    min-width: 130px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-value {
+    color: #475569;
+}
+
+.price-card {
+    background: #DC143C;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.price-amount {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 15px 0;
+}
+
+.price-currency {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.booking-form {
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--nepal-blue);
+    margin-bottom: 8px;
+}
+
+.form-control {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.btn-book {
+    background: var(--nepal-red);
+    color: white;
+    padding: 12px 30px;
+    font-weight: 600;
+    border: none;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+}
+
+.features-list li {
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.features-list li:last-child {
+    border-bottom: none;
+}
+
+.alert-custom {
+    padding: 12px 15px;
+}
+
+#locationMap {
+    width: 100%;
+    height: 300px;
+    border: 1px solid #ddd;
+}
+
+.map-marker-popup {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.map-marker-popup h6 {
+    color: var(--nepal-red);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.map-marker-popup p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #64748b;
+}

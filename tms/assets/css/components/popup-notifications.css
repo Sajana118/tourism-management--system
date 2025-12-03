@@ -1,0 +1,77 @@
+/* Popup Notification Styles */
+.popup-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideInRight 0.3s ease-out, fadeOut 0.5s ease-out 2.5s forwards;
+    max-width: 350px;
+}
+
+.popup-notification.success {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    border-left: 4px solid #1e7e34;
+}
+
+.popup-notification.error {
+    background: linear-gradient(135deg, #dc3545, #e74c3c);
+    border-left: 4px solid #c82333;
+}
+
+.popup-notification.info {
+    background: linear-gradient(135deg, #17a2b8, #3498db);
+    border-left: 4px solid #117a8b;
+}
+
+.popup-notification .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .popup-notification {
+        right: 10px;
+        left: 10px;
+        max-width: calc(100% - 20px);
+    }
+}

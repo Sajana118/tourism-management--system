@@ -1,0 +1,189 @@
+:root {
+    --nepal-red: #DC143C;
+    --nepal-blue: #003893;
+    --primary-color: #2563eb;
+    --text-dark: #1e293b;
+    --text-light: #64748b;
+    --bg-light: #f8fafc;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: var(--text-dark);
+    background: var(--bg-light);
+    margin: 0;
+    padding: 0;
+}
+
+.page-header {
+    background: #003893;
+    padding: 60px 0 40px;
+    color: white;
+    text-align: center;
+}
+
+.page-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.breadcrumb-custom {
+    background: transparent;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+.breadcrumb-custom a {
+    color: white;
+    text-decoration: none;
+}
+
+.breadcrumb-custom .active {
+    color: #fbbf24;
+}
+
+/* Filter Section */
+.filter-section {
+    background: white;
+    padding: 20px;
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+}
+
+.filter-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--nepal-blue);
+}
+
+.filter-btn {
+    background: var(--nepal-red);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    font-weight: 600;
+}
+
+/* Package Cards */
+.package-card {
+    background: white;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    height: 100%;
+}
+
+.package-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.package-img-wrapper {
+    position: relative;
+}
+
+.package-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--nepal-red);
+    color: white;
+    padding: 3px 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.package-body {
+    padding: 20px;
+}
+
+.package-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+}
+
+.package-location {
+    color: var(--nepal-blue);
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+}
+
+.package-features {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.package-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.package-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--nepal-red);
+}
+
+.currency {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.btn-details {
+    background: var(--primary-color);
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.no-packages {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.no-packages i {
+    font-size: 3rem;
+    color: var(--text-light);
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .page-header h1 {
+        font-size: 1.5rem;
+    }
+}
+
+#nepalMap {
+    width: 100%;
+    height: 300px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.map-popup {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.map-popup h6 {
+    color: var(--nepal-red);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.map-popup p {
+    margin: 3px 0;
+    font-size: 0.8rem;
+    color: #64748b;
+}
