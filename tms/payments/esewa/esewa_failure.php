@@ -5,7 +5,7 @@ include('../../config/database.php');
 
 // Check if user is logged in
 if (!isset($_SESSION['login'])) {
-    header('location: ../../signin.php');
+    header('location: ../../index.php#login');
     exit();
 }
 

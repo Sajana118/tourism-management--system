@@ -256,8 +256,8 @@ foreach($results as $result)
 <!-- //write us -->
 
 <!-- Login and Signup Modals -->
-<?php include('includes/login-modal.php');?>
-<?php include('includes/signup-modal.php');?>
+<?php include('includes/login-modal.php'); ?>
+<?php include('includes/signup-modal.php'); ?>
 
 <!-- Video Modal -->
 <div class="modal fade" id="videoModal" tabindex="-1" aria-hidden="true">
@@ -280,6 +280,25 @@ foreach($results as $result)
 
 <!-- Bootstrap 5 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Check if URL contains #login and open login modal
+window.addEventListener('DOMContentLoaded', function() {
+    if (window.location.hash === '#login') {
+        // Remove the hash from URL without reloading the page
+        history.replaceState(null, null, ' ');
+        
+        // Show login modal after a short delay to ensure DOM is ready
+        setTimeout(function() {
+            var loginModalElement = document.getElementById('loginModal');
+            if (loginModalElement) {
+                var loginModal = new bootstrap.Modal(loginModalElement);
+                loginModal.show();
+            }
+        }, 500);
+    }
+});
+</script>
 
 </body>
 </html>

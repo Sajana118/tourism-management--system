@@ -12,14 +12,11 @@ $msg = '';
 // Initialize algorithms
 $seasonalPricing = new SeasonalPricing();
 
-// Check if user is logged in
-if (!isset($_SESSION['login'])) {
-    header('location: signin.php');
-    exit();
-}
+// Check if user is logged in for booking
+$loggedIn = isset($_SESSION['login']);
 
-// Check for form submission - try multiple approaches
-if(isset($_POST['submit2']) || isset($_POST['form_submitted']) || ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pkgid']))) {
+// Only process booking for authenticated users
+if ($loggedIn && (isset($_POST['submit2']) || isset($_POST['form_submitted']) || ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pkgid'])))) {
     $pid=intval($_POST['pkgid'] ?? 0);
     $useremail=$_SESSION['login'] ?? '';
     $fromdate=$_POST['fromdate'] ?? '';
@@ -251,105 +248,117 @@ foreach($results as $result)
                     
                     <?php 
                     // Check if user has already booked this package
-                    $useremail = $_SESSION['login'];
-                    $checkSql = "SELECT * FROM tblbooking WHERE PackageId=:pkgid AND UserEmail=:useremail AND status IN (0,1,2)";
-                    $checkQuery = $dbh->prepare($checkSql);
-                    $checkQuery->bindParam(':pkgid', $pid, PDO::PARAM_INT);
-                    $checkQuery->bindParam(':useremail', $useremail, PDO::PARAM_STR);
-                    $checkQuery->execute();
-                    
-                    if($checkQuery->rowCount() > 0) {
-                        // User has already booked this package
-                        $booking = $checkQuery->fetch(PDO::FETCH_OBJ);
-                        $statusText = '';
-                        $statusClass = '';
-                        $canCancel = false;
+                    if ($loggedIn) {
+                        $useremail = $_SESSION['login'];
+                        $checkSql = "SELECT * FROM tblbooking WHERE PackageId=:pkgid AND UserEmail=:useremail AND status IN (0,1,2)";
+                        $checkQuery = $dbh->prepare($checkSql);
+                        $checkQuery->bindParam(':pkgid', $pid, PDO::PARAM_INT);
+                        $checkQuery->bindParam(':useremail', $useremail, PDO::PARAM_STR);
+                        $checkQuery->execute();
                         
-                        switch($booking->status) {
-                            case 0: // Pending
-                                $statusText = 'Pending Confirmation';
-                                $statusClass = 'status-pending';
-                                $canCancel = ($booking->PaymentStatus != 'completed'); // Can cancel if not paid
-                                break;
-                            case 1: // Confirmed
-                                $statusText = 'Confirmed';
-                                $statusClass = 'status-confirmed';
-                                $canCancel = ($booking->PaymentStatus != 'completed'); // Can cancel if not paid
-                                break;
-                            case 2: // Cancelled
-                                $statusText = 'Cancelled';
-                                $statusClass = 'status-cancelled';
-                                break;
-                        }
-                        ?>
+                        if($checkQuery->rowCount() > 0) {
+                            // User has already booked this package
+                            $booking = $checkQuery->fetch(PDO::FETCH_OBJ);
+                            $statusText = '';
+                            $statusClass = '';
+                            $canCancel = false;
+                            
+                            switch($booking->status) {
+                                case 0: // Pending
+                                    $statusText = 'Pending Confirmation';
+                                    $statusClass = 'status-pending';
+                                    $canCancel = ($booking->PaymentStatus != 'completed'); // Can cancel if not paid
+                                    break;
+                                case 1: // Confirmed
+                                    $statusText = 'Confirmed';
+                                    $statusClass = 'status-confirmed';
+                                    $canCancel = ($booking->PaymentStatus != 'completed'); // Can cancel if not paid
+                                    break;
+                                case 2: // Cancelled
+                                    $statusText = 'Cancelled';
+                                    $statusClass = 'status-cancelled';
+                                    break;
+                            }
+                            ?>
+                            <div class="alert alert-info text-center">
+                                <i class="fas fa-info-circle fa-2x mb-3"></i>
+                                <h5>You've Already Booked This Package</h5>
+                                <p class="mb-2">Booking ID: <strong>#BK-<?php echo htmlentities($booking->BookingId); ?></strong></p>
+                                <p class="mb-2">Status: <span class="status-badge <?php echo $statusClass; ?>"><?php echo $statusText; ?></span></p>
+                                <p class="mb-3">Travel Dates: <?php echo date('M d, Y', strtotime($booking->FromDate)); ?> - <?php echo date('M d, Y', strtotime($booking->ToDate)); ?></p>
+                                
+                                <?php if($booking->status != 2 && $canCancel) { // Not cancelled and can be cancelled ?>
+                                    <p class="mb-3"><small>You can cancel this booking before the travel date.</small></p>
+                                    <a href="tour-history.php?bkid=<?php echo htmlentities($booking->BookingId); ?>&cancel" class="btn btn-warning mb-2" onclick="return confirm('Are you sure you want to cancel this booking?');">
+                                        <i class="fas fa-times-circle me-2"></i>Cancel Booking
+                                    </a>
+                                <?php } else if($booking->status != 2 && !$canCancel) { // Not cancelled but paid ?>
+                                    <p class="mb-3"><small class="text-danger"><i class="fas fa-exclamation-circle me-1"></i> This booking has been paid and cannot be cancelled online. Please contact support for refund requests.</small></p>
+                                <?php } else { // Already cancelled ?>
+                                    <p class="mb-3"><small class="text-muted">This booking has been cancelled.</small></p>
+                                <?php } ?>
+                                
+                                <a href="tour-history.php" class="btn btn-primary">
+                                    <i class="fas fa-history me-2"></i>View Booking History
+                                </a>
+                            </div>
+                        <?php } else { ?>
+                            <form method="post" id="bookingForm" action="<?php echo $_SERVER['PHP_SELF'] . '?pkgid=' . $pid; ?>">
+                                <input type="hidden" name="pkgid" value="<?php echo htmlentities($pid); ?>">
+                                <input type="hidden" name="form_submitted" value="1">
+                                <div class="mb-3">
+                                    <label for="datepicker" class="form-label"><i class="fas fa-calendar-alt me-2"></i>From Date</label>
+                                    <input type="text" class="form-control" id="datepicker" name="fromdate" placeholder="Select start date" required readonly autocomplete="off">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="datepicker1" class="form-label"><i class="fas fa-calendar-alt me-2"></i>To Date</label>
+                                    <input type="text" class="form-control" id="datepicker1" name="todate" placeholder="Select end date" required readonly autocomplete="off">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="persons" class="form-label"><i class="fas fa-users me-2"></i>Number of Persons</label>
+                                    <input type="number" class="form-control" id="persons" name="persons" min="1" max="20" value="1" required autocomplete="number">
+                                    <div class="form-text">Select the number of people traveling</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="fas fa-concierge-bell me-2"></i>Additional Services</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="guide" name="guide" value="1" autocomplete="off">
+                                        <label class="form-check-label" for="guide">
+                                            Tour Guide (+ NPR 1000 per day)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="vehicle" name="vehicle" value="1" autocomplete="off">
+                                        <label class="form-check-label" for="vehicle">
+                                            Vehicle Transportation (+ NPR 2000 per day)
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="comment" class="form-label"><i class="fas fa-comment me-2"></i>Special Requests</label>
+                                    <textarea class="form-control" name="comment" id="comment" rows="3" placeholder="Any special requirements?" autocomplete="off"></textarea>
+                                </div>
+                                <?php if($loggedIn) { ?>
+                                    <button type="submit" name="submit2" class="btn-book" id="bookNowBtn">
+                                        <i class="fas fa-check-circle me-2"></i>Book Now
+                                    </button>
+                                <?php } else { ?>
+                                    <a href="#" class="btn-book" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Sign In to Book
+                                    </a>
+                                <?php } ?>
+                            </form>
+                        <?php } ?>
+                    <?php } else { ?>
+                        <!-- Show booking form with login prompt for unauthenticated users -->
                         <div class="alert alert-info text-center">
                             <i class="fas fa-info-circle fa-2x mb-3"></i>
-                            <h5>You've Already Booked This Package</h5>
-                            <p class="mb-2">Booking ID: <strong>#BK-<?php echo htmlentities($booking->BookingId); ?></strong></p>
-                            <p class="mb-2">Status: <span class="status-badge <?php echo $statusClass; ?>"><?php echo $statusText; ?></span></p>
-                            <p class="mb-3">Travel Dates: <?php echo date('M d, Y', strtotime($booking->FromDate)); ?> - <?php echo date('M d, Y', strtotime($booking->ToDate)); ?></p>
-                            
-                            <?php if($booking->status != 2 && $canCancel) { // Not cancelled and can be cancelled ?>
-                                <p class="mb-3"><small>You can cancel this booking before the travel date.</small></p>
-                                <a href="tour-history.php?bkid=<?php echo htmlentities($booking->BookingId); ?>&cancel" class="btn btn-warning mb-2" onclick="return confirm('Are you sure you want to cancel this booking?');">
-                                    <i class="fas fa-times-circle me-2"></i>Cancel Booking
-                                </a>
-                            <?php } else if($booking->status != 2 && !$canCancel) { // Not cancelled but paid ?>
-                                <p class="mb-3"><small class="text-danger"><i class="fas fa-exclamation-circle me-1"></i> This booking has been paid and cannot be cancelled online. Please contact support for refund requests.</small></p>
-                            <?php } else { // Already cancelled ?>
-                                <p class="mb-3"><small class="text-muted">This booking has been cancelled.</small></p>
-                            <?php } ?>
-                            
-                            <a href="tour-history.php" class="btn btn-primary">
-                                <i class="fas fa-history me-2"></i>View Booking History
+                            <h5>Please Sign In to Book</h5>
+                            <p class="mb-3">You need to be signed in to book this package.</p>
+                            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                <i class="fas fa-sign-in-alt me-2"></i>Sign In to Book
                             </a>
                         </div>
-                    <?php } else { ?>
-                        <form method="post" id="bookingForm" action="<?php echo $_SERVER['PHP_SELF'] . '?pkgid=' . $pid; ?>">
-                            <input type="hidden" name="pkgid" value="<?php echo htmlentities($pid); ?>">
-                            <input type="hidden" name="form_submitted" value="1">
-                            <div class="mb-3">
-                                <label for="datepicker" class="form-label"><i class="fas fa-calendar-alt me-2"></i>From Date</label>
-                                <input type="text" class="form-control" id="datepicker" name="fromdate" placeholder="Select start date" required readonly autocomplete="off">
-                            </div>
-                            <div class="mb-3">
-                                <label for="datepicker1" class="form-label"><i class="fas fa-calendar-alt me-2"></i>To Date</label>
-                                <input type="text" class="form-control" id="datepicker1" name="todate" placeholder="Select end date" required readonly autocomplete="off">
-                            </div>
-                            <div class="mb-3">
-                                <label for="persons" class="form-label"><i class="fas fa-users me-2"></i>Number of Persons</label>
-                                <input type="number" class="form-control" id="persons" name="persons" min="1" max="20" value="1" required autocomplete="number">
-                                <div class="form-text">Select the number of people traveling</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label"><i class="fas fa-concierge-bell me-2"></i>Additional Services</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="guide" name="guide" value="1" autocomplete="off">
-                                    <label class="form-check-label" for="guide">
-                                        Tour Guide (+ NPR 1000 per day)
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="vehicle" name="vehicle" value="1" autocomplete="off">
-                                    <label class="form-check-label" for="vehicle">
-                                        Vehicle Transportation (+ NPR 2000 per day)
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="mb-4">
-                                <label for="comment" class="form-label"><i class="fas fa-comment me-2"></i>Special Requests</label>
-                                <textarea class="form-control" name="comment" id="comment" rows="3" placeholder="Any special requirements?" autocomplete="off"></textarea>
-                            </div>
-                            <?php if($_SESSION['login']) { ?>
-                                <button type="submit" name="submit2" class="btn-book" id="bookNowBtn">
-                                    <i class="fas fa-check-circle me-2"></i>Book Now
-                                </button>
-                            <?php } else { ?>
-                                <a href="#" class="btn-book" data-bs-toggle="modal" data-bs-target="#loginModal">
-                                    <i class="fas fa-sign-in-alt me-2"></i>Sign In to Book
-                                </a>
-                            <?php } ?>
-                        </form>
                     <?php } ?>
                     
                     <div class="mt-4 text-center">
@@ -384,8 +393,8 @@ foreach($results as $result)
 <?php include('includes/write-us.php');?>
 
 <!-- Login and Signup Modals -->
-<?php include('includes/login-modal.php');?>
-<?php include('includes/signup-modal.php');?>
+<?php include('includes/login-modal.php'); ?>
+<?php include('includes/signup-modal.php'); ?>
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -12,13 +12,20 @@ if(isset($_POST['signin'])) {
     
     if($result['success']) {
         $loginSuccess = $result['message'];
-        // Show welcome popup and redirect
+        // Get user's name for personalized welcome message
+        $userEmail = $_POST['email'];
+        $userSql = "SELECT FullName FROM tblusers WHERE EmailId = :email";
+        $userQuery = $dbh->prepare($userSql);
+        $userQuery->bindParam(':email', $userEmail, PDO::PARAM_STR);
+        $userQuery->execute();
+        $userResult = $userQuery->fetch(PDO::FETCH_OBJ);
+        $userName = $userResult ? $userResult->FullName : 'User';
+        
+        // Show personalized welcome popup and redirect
         echo '<script>
-            // Show welcome popup
+            // Show personalized welcome popup using only the popup notification system
             if (typeof PopupNotification !== "undefined") {
-                PopupNotification.success("Welcome back! You have been successfully logged in.");
-            } else {
-                alert("Welcome back! You have been successfully logged in.");
+                PopupNotification.success("Welcome back, ' . addslashes($userName) . '! You have been successfully logged in.");
             }
             
             // Redirect after a short delay

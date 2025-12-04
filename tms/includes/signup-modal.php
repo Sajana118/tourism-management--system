@@ -25,13 +25,11 @@ if(isset($_POST['submit'])) {
         
         if($result['success']) {
             $signupSuccess = $result['message'];
-            // Show success popup and switch to login modal
+            // Show personalized success popup and switch to login modal
             echo '<script>
-                // Show success popup
+                // Show personalized success popup using only the popup notification system
                 if (typeof PopupNotification !== "undefined") {
-                    PopupNotification.success("Registration successful! You can now sign in.");
-                } else {
-                    alert("Registration successful! You can now sign in.");
+                    PopupNotification.success("Welcome ' . addslashes($_POST['fname']) . '! Your account has been created successfully. Please sign in to continue.");
                 }
                 
                 // Hide signup modal and show login modal after a short delay
@@ -102,26 +100,6 @@ if(isset($_POST['submit'])) {
                     <div class="mb-3">
                         <label for="modal-signup-password" class="form-label"><i class="fas fa-lock me-2"></i>Password</label>
                         <input type="password" class="form-control" name="password" id="modal-signup-password" placeholder="Create a password (min 6 characters)" autocomplete="new-password" required>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="modal-signup-confirm-password" class="form-label"><i class="fas fa-lock me-2"></i>Confirm Password</label>
-                        <input type="password" class="form-control" name="confirm_password" id="modal-signup-confirm-password" placeholder="Re-enter password" autocomplete="new-password" required>
-                    </div>
-                    
-                    <button type="submit" name="submit" class="btn btn-primary">Create Account</button>
-                </form>
-                
-                <div class="text-center mt-3">
-                    <small class="text-muted">Already have an account? <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Sign In</a></small>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Popup Notification JS -->
-<script src="assets/js/components/popup-notifications.js"></script>                  <input type="password" class="form-control" name="password" id="modal-signup-password" placeholder="Create a password (min 6 characters)" autocomplete="new-password" required>
                     </div>
                     
                     <div class="mb-3">

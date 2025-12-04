@@ -17,6 +17,11 @@
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
+/* Adjust layout when no links are present */
+.footer-content:has(.footer-links:empty) {
+    justify-content: space-between;
+}
+
 .footer-brand {
     font-size: 1.3rem;
     font-weight: 700;
@@ -101,9 +106,7 @@
             
             <!-- Links -->
             <ul class="footer-links">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="package-list.php">Packages</a></li>
-                <li><a href="page.php?type=aboutus">About</a></li>
+                <!-- Removed Home, Packages, and About links as per user request -->
             </ul>
             
             <!-- Social -->

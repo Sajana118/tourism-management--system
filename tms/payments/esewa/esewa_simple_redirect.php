@@ -11,8 +11,8 @@ error_log("GET data: " . print_r($_GET, true));
 
 // Check if user is logged in
 if (!isset($_SESSION['login'])) {
-    error_log("User not logged in, redirecting to signin.php");
-    header('location: ../../signin.php');
+    error_log("User not logged in, redirecting to index.php with login prompt");
+    header('location: ../../index.php#login');
     exit();
 }
 
